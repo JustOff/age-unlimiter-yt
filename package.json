@@ -1,0 +1,18 @@
+{
+  "name": "ageless-yt-me",
+  "id": "ageless-yt-me@Off.JustOff",
+  "version": "1.0.1",
+  "title": "Ageless for YouTube (Moon Edition)",
+  "description": "Watch age restricted YouTube videos in Pale Moon without signing in",
+  "author": "Off JustOff <Off.Just.Off@gmail.com>",
+  "homepage": "https://github.com/JustOff/ageless-yt-me",
+  "contributors": [
+    "H34dcr4b <nick@diedrich.me>"
+  ],
+  "engines": {
+    "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}": ">=27.1.0b1"
+  },
+  "main": "./lib/main",
+  "permissions": {"private-browsing": true},
+  "license": "MPL 2.0"
+}
