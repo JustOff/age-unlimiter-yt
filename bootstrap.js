@@ -78,6 +78,9 @@ function startup(data, reason) {
             console.error("Age Unlimiter for YouTube Error: ", e);
         }
 
+        // Filter out video ads missed by uBlock Origin when Age Unlimiter is enabled
+        if (parsedData.adPlacements) delete(parsedData.adPlacements);
+
         return parsedData;
     }
 
