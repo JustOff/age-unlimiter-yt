@@ -105,14 +105,14 @@ function startup(data, reason) {
 
         // Query YT's unrestricted api endpoint
         let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "/get_video_info?video_id=" + encodeURIComponent(videoId), false); // Synchronous!!!
+        xmlhttp.open("GET", "/get_video_info?html5=1&video_id=" + encodeURIComponent(videoId), false); // Synchronous!!!
         xmlhttp.send(null);
         let playerResponse = nativeParse(new URLSearchParams(xmlhttp.responseText).get("player_response"));
 
         // Fix for https://github.com/zerodytrash/Simple-YouTube-Age-Restriction-Bypass/issues/4
         if (playerResponse.playabilityStatus.status !== "OK") {
             xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/get_video_info?video_id=" + encodeURIComponent(videoId) + "&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2F" + encodeURIComponent(videoId), false); // Synchronous!!!
+            xmlhttp.open("GET", "/get_video_info?html5=1&video_id=" + encodeURIComponent(videoId) + "&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2F" + encodeURIComponent(videoId), false); // Synchronous!!!
             xmlhttp.send(null);
             playerResponse = nativeParse(new URLSearchParams(xmlhttp.responseText).get("player_response"));
         }
