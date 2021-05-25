@@ -81,7 +81,7 @@ function startup(data, reason) {
         return parsedData;
     }
 
-    let unlockablePlayerStates = ["AGE_VERIFICATION_REQUIRED", "LOGIN_REQUIRED"];
+    let unlockablePlayerStates = ["AGE_VERIFICATION_REQUIRED", "LOGIN_REQUIRED", "UNPLAYABLE"];
     function isUnlockable(playabilityStatus) {
         if (!playabilityStatus || !playabilityStatus.status) return false;
         return unlockablePlayerStates.includes(playabilityStatus.status);
