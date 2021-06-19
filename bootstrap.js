@@ -108,25 +108,9 @@ function startup(data, reason) {
 
         // Query YT's unrestricted api endpoint
         let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "/get_video_info?html5=1&video_id=" + encodeURIComponent(videoId), false); // Synchronous!!!
+        xmlhttp.open("GET", "/get_video_info?html5=1&video_id=" + encodeURIComponent(videoId) + "&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2F" + encodeURIComponent(videoId) + "&c=TVHTML5&cver=7.20210619", false); // Synchronous!!!
         xmlhttp.send(null);
         let playerResponse = nativeParse(new URLSearchParams(xmlhttp.responseText).get("player_response"));
-
-        // Fix for https://github.com/zerodytrash/Simple-YouTube-Age-Restriction-Bypass/issues/4
-        if (playerResponse.playabilityStatus.status !== "OK") {
-            xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/get_video_info?html5=1&video_id=" + encodeURIComponent(videoId) + "&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2F" + encodeURIComponent(videoId), false); // Synchronous!!!
-            xmlhttp.send(null);
-            playerResponse = nativeParse(new URLSearchParams(xmlhttp.responseText).get("player_response"));
-        }
-
-        // If the video is age restricted and the uploader has disallowed the 'Allow embedding' option, these extra params can help in some cases...
-        if (playerResponse.playabilityStatus.status !== "OK") {
-            xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/get_video_info?video_id=" + encodeURIComponent(videoId) + "&html5=1&eurl&ps=desktop-polymer&el=adunit&cbr=Chrome&cplatform=DESKTOP&break_type=1&autoplay=1&content_v&authuser=0", false); // Synchronous!!!
-            xmlhttp.send(null);
-            playerResponse = nativeParse(new URLSearchParams(xmlhttp.responseText).get("player_response"));
-        }
 
         // Cache response for 10 seconds
         responseCache = { videoId: videoId, content: playerResponse };
