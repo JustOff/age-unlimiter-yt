@@ -106,17 +106,39 @@ function startup(data, reason) {
         // Check if is cached
         if (responseCache.videoId === videoId) return responseCache.content;
 
-        // Query YT's unrestricted api endpoint
+        // Use InnerTube API to get video info
+        let payload = getInnertubeEmbedPlayerPayload(videoId);
         let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "/get_video_info?html5=1&video_id=" + encodeURIComponent(videoId) + "&eurl=https%3A%2F%2Fyoutube.googleapis.com%2Fv%2F" + encodeURIComponent(videoId) + "&c=TVHTML5&cver=7.20210619", false); // Synchronous!!!
-        xmlhttp.send(null);
-        let playerResponse = nativeParse(new URLSearchParams(xmlhttp.responseText).get("player_response"));
+        xmlhttp.open("POST", "/youtubei/v1/player?key=" + ytcfg.get("INNERTUBE_API_KEY"), false); // Synchronous!!!
+        xmlhttp.send(JSON.stringify(payload));
+        let playerResponse = nativeParse(xmlhttp.responseText);
 
         // Cache response for 10 seconds
         responseCache = { videoId: videoId, content: playerResponse };
         setTimeout(function() { responseCache = {} }, 10000);
 
         return playerResponse;
+    }
+
+    function getInnertubeEmbedPlayerPayload(videoId) {
+        return {
+            "context": {
+                "client": {
+                    "clientName": ytcfg.get("INNERTUBE_CLIENT_NAME"),
+                    "clientVersion": ytcfg.get("INNERTUBE_CLIENT_VERSION"),
+                    "clientScreen": "EMBED"
+                },
+                "thirdParty": {
+                    "embedUrl": "https://www.youtube.com/"
+                }
+            },
+            "playbackContext": {
+                "contentPlaybackContext": {
+                    "signatureTimestamp": ytcfg.get("STS")
+                }
+            },
+            "videoId": videoId
+        }
     }
 })(document.defaultView);
 `;
